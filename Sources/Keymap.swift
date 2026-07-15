@@ -28,7 +28,7 @@ struct Assignment: Codable, Identifiable, Hashable {
 // Wire-compatible with OATS KEYMAP web v0.2.0 JSON. v0.1.0 files migrate on load.
 
 struct Keymap: Codable {
-    struct Plot: Codable  { var low = 24;  var keys = 81 }
+    struct Plot: Codable  { var low = 21;  var keys = 88 }
     struct Board: Codable { var model = "M-Audio Keystation 61es"; var keys = 61; var octaveShift = 0 }
 
     var app = "oats-keymap"

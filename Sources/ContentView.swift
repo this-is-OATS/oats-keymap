@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import CoreMIDI
 #if os(macOS)
 import AppKit
 #else

@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		25A48F7D26CBB6F7177E0C23 /* Organ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAD5238DD74BC2234956653 /* Organ.swift */; };
+		4726F296046B9023177E1AB6 /* Gel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17F593BB011E593FFB2B2EB /* Gel.swift */; };
+		506A18643D294809B12F6030 /* Keymap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEFF589FE35DD820D18CA3E /* Keymap.swift */; };
+		59222B9EECFC17A5DBC3B86F /* OatsKeymapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE450C3ECD7886FF21F2A14 /* OatsKeymapApp.swift */; };
+		6714D8CD4DDB7793E3500F33 /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B08CE8CF8C6AC7A09D9C07D /* PlotView.swift */; };
+		7E51DB75E3FB06E28A6264C0 /* OrganView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCB88AE7A1E4C44EE39098D /* OrganView.swift */; };
+		9C88D501A044D42C1D6B064B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D384F862FEEC368D23C5DF /* ContentView.swift */; };
+		AC48F341BDBC349BB65D4B24 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1707C2B883155CA080C4BF5 /* AppModel.swift */; };
+		C1980D5ABD9FB6305FE4F7B2 /* MIDIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0DE450C3ECD7886FF21F2A14 /* OatsKeymapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OatsKeymapApp.swift; sourceTree = "<group>"; };
+		0DEFF589FE35DD820D18CA3E /* Keymap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keymap.swift; sourceTree = "<group>"; };
+		1DCB88AE7A1E4C44EE39098D /* OrganView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganView.swift; sourceTree = "<group>"; };
+		3BAD5238DD74BC2234956653 /* Organ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Organ.swift; sourceTree = "<group>"; };
+		79D384F862FEEC368D23C5DF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7B08CE8CF8C6AC7A09D9C07D /* PlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlotView.swift; sourceTree = "<group>"; };
+		846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEngine.swift; sourceTree = "<group>"; };
+		A17F593BB011E593FFB2B2EB /* Gel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gel.swift; sourceTree = "<group>"; };
+		C1707C2B883155CA080C4BF5 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		C7DB05666A540CD22BB857B1 /* OatsKeymap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OatsKeymap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0AF51358DD878285C779654D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7DB05666A540CD22BB857B1 /* OatsKeymap.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		195E013016BCF4A32F085E60 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C1707C2B883155CA080C4BF5 /* AppModel.swift */,
+				79D384F862FEEC368D23C5DF /* ContentView.swift */,
+				A17F593BB011E593FFB2B2EB /* Gel.swift */,
+				0DEFF589FE35DD820D18CA3E /* Keymap.swift */,
+				846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */,
+				0DE450C3ECD7886FF21F2A14 /* OatsKeymapApp.swift */,
+				3BAD5238DD74BC2234956653 /* Organ.swift */,
+				1DCB88AE7A1E4C44EE39098D /* OrganView.swift */,
+				7B08CE8CF8C6AC7A09D9C07D /* PlotView.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		D263EB991B680846E5F11CA3 = {
+			isa = PBXGroup;
+			children = (
+				195E013016BCF4A32F085E60 /* Sources */,
+				0AF51358DD878285C779654D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E69A3783390622F49BB2AAC8 /* OatsKeymap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7D852B68AC1CD4ECC84D0D10 /* Build configuration list for PBXNativeTarget "OatsKeymap" */;
+			buildPhases = (
+				5C839337F77AF4CCE65A8144 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OatsKeymap;
+			packageProductDependencies = (
+			);
+			productName = OatsKeymap;
+			productReference = C7DB05666A540CD22BB857B1 /* OatsKeymap.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		677230B459593E1F0012BD0F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					E69A3783390622F49BB2AAC8 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 8B07C783A1B8257ED6EB94D8 /* Build configuration list for PBXProject "OatsKeymap" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D263EB991B680846E5F11CA3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0AF51358DD878285C779654D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E69A3783390622F49BB2AAC8 /* OatsKeymap */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5C839337F77AF4CCE65A8144 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC48F341BDBC349BB65D4B24 /* AppModel.swift in Sources */,
+				9C88D501A044D42C1D6B064B /* ContentView.swift in Sources */,
+				4726F296046B9023177E1AB6 /* Gel.swift in Sources */,
+				506A18643D294809B12F6030 /* Keymap.swift in Sources */,
+				C1980D5ABD9FB6305FE4F7B2 /* MIDIEngine.swift in Sources */,
+				59222B9EECFC17A5DBC3B86F /* OatsKeymapApp.swift in Sources */,
+				25A48F7D26CBB6F7177E0C23 /* Organ.swift in Sources */,
+				7E51DB75E3FB06E28A6264C0 /* OrganView.swift in Sources */,
+				6714D8CD4DDB7793E3500F33 /* PlotView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0CBD1F9B66C94689A602DE75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
+				PRODUCT_NAME = "OATS KEYMAP";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3FED1188ED5B3F97CF95A0AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CC8E96F171E807514046AC58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		EEA829D2F41485363FFFEFA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
+				PRODUCT_NAME = "OATS KEYMAP";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7D852B68AC1CD4ECC84D0D10 /* Build configuration list for PBXNativeTarget "OatsKeymap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0CBD1F9B66C94689A602DE75 /* Debug */,
+				EEA829D2F41485363FFFEFA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8B07C783A1B8257ED6EB94D8 /* Build configuration list for PBXProject "OatsKeymap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC8E96F171E807514046AC58 /* Debug */,
+				3FED1188ED5B3F97CF95A0AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 677230B459593E1F0012BD0F /* Project object */;
+}
