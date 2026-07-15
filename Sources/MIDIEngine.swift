@@ -36,15 +36,15 @@ final class MIDIEngine: ObservableObject {
     @Published var status: String = "Starting"
 
     @Published var selectedSource: MIDIEndpointRef = 0 { didSet { connect(selectedSource) } }
-    @Published var selectedDest: MIDIEndpointRef = 0     { didSet { sync { _dest = selectedDest } } }
+    @Published var selectedDest: MIDIEndpointRef = 0     { didSet { sync { rtDest = selectedDest } } }
     @Published var armed = false {
         didSet {
-            sync { _armed = armed }
+            sync { rtArmed = armed }
             if !armed { panic() }
             status = armed ? "Armed" : "Idle"
         }
     }
-    @Published var inChannel = 1 { didSet { sync { _inCh = UInt8(min(16, max(1, inChannel))) } } }
+    @Published var inChannel = 1 { didSet { sync { rtInCh = UInt8(min(16, max(1, inChannel))) } } }
 
     struct LogLine: Identifiable { let id = UUID(); let text: String }
 
@@ -59,9 +59,9 @@ final class MIDIEngine: ObservableObject {
     private let lock = NSLock()
     private var _table = [[OutSpec]?](repeating: nil, count: 128)
     private var _held  = [[(UInt8, UInt8)]?](repeating: nil, count: 128)   // (noteOffStatus, note)
-    private var _inCh: UInt8 = 1
-    private var _armed = false
-    private var _dest: MIDIEndpointRef = 0
+    private var rtInCh: UInt8 = 1
+    private var rtArmed = false
+    private var rtDest: MIDIEndpointRef = 0
     private var runningStatus: UInt8 = 0
 
     private func sync(_ body: () -> Void) { lock.lock(); body(); lock.unlock() }
@@ -190,8 +190,8 @@ final class MIDIEngine: ObservableObject {
         let ch = (status & 0x0F) + 1
 
         lock.lock()
-        let inCh = _inCh
-        let live = _armed
+        let inCh = rtInCh
+        let live = rtArmed
         let specs: [OutSpec]? = (d1 < 128) ? _table[Int(d1)] : nil
         lock.unlock()
 
@@ -259,7 +259,7 @@ final class MIDIEngine: ObservableObject {
 
         if virtualSrc != 0 { MIDIReceived(virtualSrc, &list) }
 
-        lock.lock(); let dest = _dest; lock.unlock()
+        lock.lock(); let dest = rtDest; lock.unlock()
         if dest != 0 { MIDISend(outPort, dest, &list) }
     }
 
