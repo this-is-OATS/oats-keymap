@@ -1,6 +1,5 @@
 import SwiftUI
 import UniformTypeIdentifiers
-import CoreMIDI
 #if os(macOS)
 import AppKit
 #else
@@ -18,6 +17,7 @@ struct ContentView: View {
         HStack(spacing: 0) {
             VStack(spacing: 0) {
                 Header(m: m, importing: $importing, exporting: $exporting)
+                RegisterPads(m: m)
                 GelRail(m: m)
                 PlotPanel(m: m)
                 ToolRail(m: m, e: m.engine)

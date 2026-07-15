@@ -39,7 +39,7 @@ final class MIDIEngine: ObservableObject {
     @Published var selectedDest: MIDIEndpointRef = 0     { didSet { sync { _dest = selectedDest } } }
     @Published var armed = false {
         didSet {
-            sync { _armedFlag = armed }
+            sync { _armed = armed }
             if !armed { panic() }
             status = armed ? "Armed" : "Idle"
         }
@@ -60,7 +60,7 @@ final class MIDIEngine: ObservableObject {
     private var _table = [[OutSpec]?](repeating: nil, count: 128)
     private var _held  = [[(UInt8, UInt8)]?](repeating: nil, count: 128)   // (noteOffStatus, note)
     private var _inCh: UInt8 = 1
-    private var _armedFlag = false
+    private var _armed = false
     private var _dest: MIDIEndpointRef = 0
     private var runningStatus: UInt8 = 0
 
@@ -191,7 +191,7 @@ final class MIDIEngine: ObservableObject {
 
         lock.lock()
         let inCh = _inCh
-        let live = _armedFlag
+        let live = _armed
         let specs: [OutSpec]? = (d1 < 128) ? _table[Int(d1)] : nil
         lock.unlock()
 

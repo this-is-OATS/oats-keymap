@@ -1,6 +1,6 @@
 import SwiftUI
 
-let APP_VERSION = "0.3.0"
+let APP_VERSION = "0.6.0"
 
 // MARK: - Gels
 // Sixteen MIDI channels, sixteen colours. Colour is the only thing in this app

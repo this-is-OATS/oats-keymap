@@ -13,6 +13,7 @@
 		59222B9EECFC17A5DBC3B86F /* OatsKeymapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE450C3ECD7886FF21F2A14 /* OatsKeymapApp.swift */; };
 		6714D8CD4DDB7793E3500F33 /* PlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B08CE8CF8C6AC7A09D9C07D /* PlotView.swift */; };
 		7E51DB75E3FB06E28A6264C0 /* OrganView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCB88AE7A1E4C44EE39098D /* OrganView.swift */; };
+		927F7211DC43745EC990E83A /* RegisterPads.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3A0188ABAD31FFF253ECB /* RegisterPads.swift */; };
 		9C88D501A044D42C1D6B064B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D384F862FEEC368D23C5DF /* ContentView.swift */; };
 		AC48F341BDBC349BB65D4B24 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1707C2B883155CA080C4BF5 /* AppModel.swift */; };
 		C1980D5ABD9FB6305FE4F7B2 /* MIDIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */; };
@@ -29,6 +30,7 @@
 		A17F593BB011E593FFB2B2EB /* Gel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gel.swift; sourceTree = "<group>"; };
 		C1707C2B883155CA080C4BF5 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		C7DB05666A540CD22BB857B1 /* OatsKeymap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OatsKeymap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3C3A0188ABAD31FFF253ECB /* RegisterPads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPads.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -52,6 +54,7 @@
 				3BAD5238DD74BC2234956653 /* Organ.swift */,
 				1DCB88AE7A1E4C44EE39098D /* OrganView.swift */,
 				7B08CE8CF8C6AC7A09D9C07D /* PlotView.swift */,
+				D3C3A0188ABAD31FFF253ECB /* RegisterPads.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -93,10 +96,6 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					E69A3783390622F49BB2AAC8 = {
-						DevelopmentTeam = "";
-						ProvisioningStyle = Manual;
-					};
 				};
 			};
 			buildConfigurationList = 8B07C783A1B8257ED6EB94D8 /* Build configuration list for PBXProject "OatsKeymap" */;
@@ -132,6 +131,7 @@
 				25A48F7D26CBB6F7177E0C23 /* Organ.swift in Sources */,
 				7E51DB75E3FB06E28A6264C0 /* OrganView.swift in Sources */,
 				6714D8CD4DDB7793E3500F33 /* PlotView.swift in Sources */,
+				927F7211DC43745EC990E83A /* RegisterPads.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,11 +142,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -157,7 +154,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.0;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;
@@ -295,11 +292,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -310,7 +304,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.3.0;
+				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;

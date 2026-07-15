@@ -41,11 +41,25 @@ struct Register: Identifiable, Codable, Hashable {
     var number: Int
     var name: String
     var channel: Int = 1
-    var note: Int? = nil              // nil = unknown, cannot fire
-    var latched: Bool = false
+    var note: Int? = nil              // the trigger note. On this organ, a lowest-octave key.
+    var latched: Bool = false         // operator's visual state — the organ's true state can't be read back
+    var padSlot: Int? = nil           // position on the touchpad strip, 0-based. nil = not on a pad.
 
-    enum CodingKeys: String, CodingKey { case number, name, channel, note }
+    enum CodingKeys: String, CodingKey { case number, name, channel, note, padSlot }
     var known: Bool { note != nil }
+}
+
+// The twelve registers latch off Bd 214 pins 1-12 on channel 1. Their trigger notes are
+// the printed MIDI numbers at those pins — a diatonic (white-key) run, NOT chromatic.
+// Confirmed off the chart: pin 1 = note 19 (Pan Flutes) up to pin 12 = note 38.
+// pin = note - 18 across this block. A pad is that trigger key, mirrored to the screen.
+enum RegisterBank {
+    static let channel = 1
+    static let count = 12
+    // index 0-11  ->  printed MIDI note at pin (index+1)
+    static let notes = [19, 21, 23, 24, 26, 28, 29, 31, 33, 35, 36, 38]
+    static func note(_ index: Int) -> Int { notes[min(max(0, index), notes.count - 1)] }
+    static func pin(_ index: Int)  -> Int { index + 1 }       // 1...12
 }
 
 // MARK: - Organ profile
@@ -75,6 +89,19 @@ struct PercussionHit: Identifiable, Codable, Hashable {
 // could not be run, confirmed = false and the app paints it red.
 
 enum Gene {
+    /// Seat registers on the twelve pads with their confirmed Bd 214 trigger notes (40-51, ch 1).
+    static func seatOnPads(_ regs: [Register]) -> [Register] {
+        regs.enumerated().map { i, r in
+            var out = r
+            out.padSlot = i < RegisterBank.count ? i : nil
+            if i < RegisterBank.count {
+                out.note = RegisterBank.note(i)
+                out.channel = RegisterBank.channel
+            }
+            return out
+        }
+    }
+
     static var profile: OrganProfile {
         OrganProfile(
             name: "Gene's Pipe Organ",
@@ -100,8 +127,9 @@ enum Gene {
                      low: 82, high: 101, pinOffset: 69, confirmed: true,
                      caveat: "Pins 13–32. Pins 1–12 on this board are the percussion, which is a lookup, not an offset.")
             ],
-            registers: [
-                // Names read clean off the chart. Note numbers are NOT on it.
+            registers: seatOnPads([
+                // Names read clean off the chart. Trigger notes default to the lowest
+                // octave (36-47) in this order — a starting map to verify against the console.
                 Register(number: 1,  name: "Pan Flutes"),
                 Register(number: 2,  name: "Countermelody Bourdons"),
                 Register(number: 3,  name: "Glock / Xylophone"),
@@ -114,7 +142,7 @@ enum Gene {
                 Register(number: 10, name: "(not listed)"),
                 Register(number: 11, name: "Tambourine"),
                 Register(number: 12, name: "Castanets / Maracas")
-            ],
+            ]),
             percussion: [
                 PercussionHit(pin: 1,  name: "Bass Drum",    note: 36),
                 PercussionHit(pin: 2,  name: "Snare 1",      note: 38),

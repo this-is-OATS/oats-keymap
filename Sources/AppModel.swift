@@ -17,6 +17,7 @@ final class AppModel: ObservableObject {
     @Published var layerOffset = 12
     @Published var middleC3 = true        { didSet { Notes.middleC3 = middleC3; objectWillChange.send() } }
     @Published var lastAction = ""
+    @Published var padAssignMode = false
 
     let engine = MIDIEngine()
 
@@ -189,6 +190,48 @@ final class AppModel: ObservableObject {
         engine.sendRaw([0x90 | UInt8(max(0, reg.channel - 1)), UInt8(note), 100])
         engine.sendRaw([0x80 | UInt8(max(0, reg.channel - 1)), UInt8(note), 0])
         lastAction = "Fired register \(reg.number) — \(reg.name)"
+    }
+
+    // MARK: Touchpads — the twelve register stops, mirrored to the screen
+
+    /// Registers that hold a pad slot, ordered by slot. This is the top strip.
+    var pads: [Register] {
+        km.organ.registers
+            .filter { $0.padSlot != nil }
+            .sorted { ($0.padSlot ?? 0) < ($1.padSlot ?? 0) }
+    }
+
+    /// Tap a pad: fire its trigger note as a pulse, and flip the operator's visual latch.
+    /// The organ can't be read back, so `latched` is a reminder, not ground truth.
+    func tapPad(_ reg: Register) {
+        guard let i = km.organ.registers.firstIndex(where: { $0.id == reg.id }) else { return }
+        fireRegister(reg)
+        km.organ.registers[i].latched.toggle()
+        touched()
+    }
+
+    func setPadNote(_ reg: Register, _ note: Int?) {
+        guard let i = km.organ.registers.firstIndex(where: { $0.id == reg.id }) else { return }
+        km.organ.registers[i].note = note
+        touched()
+    }
+
+    func setPadChannel(_ reg: Register, _ ch: Int) {
+        guard let i = km.organ.registers.firstIndex(where: { $0.id == reg.id }) else { return }
+        km.organ.registers[i].channel = min(16, max(1, ch))
+        touched()
+    }
+
+    func setPadName(_ reg: Register, _ name: String) {
+        guard let i = km.organ.registers.firstIndex(where: { $0.id == reg.id }) else { return }
+        km.organ.registers[i].name = name
+        touched()
+    }
+
+    /// Reset every lit pad — send nothing, just clear the operator's visual state.
+    func clearPadLatches() {
+        for i in km.organ.registers.indices { km.organ.registers[i].latched = false }
+        touched()
     }
 
     func setRegisterNote(_ i: Int, _ note: Int?) {
