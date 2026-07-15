@@ -15,14 +15,14 @@ final class AppModel: ObservableObject {
     @Published var rangeB: Int? = nil
     @Published var rangeBase = 36
     @Published var layerOffset = 12
-    @Published var middleC3 = true        { didSet { Notes.middleC3 = middleC3; objectWillChange.send() } }
+    @Published var naming: NoteNaming = .c5 { didSet { Notes.naming = naming; objectWillChange.send() } }
     @Published var lastAction = ""
     @Published var padAssignMode = false
 
     let engine = MIDIEngine()
 
     init() {
-        Notes.middleC3 = true
+        Notes.naming = .c5
         engine.inChannel = km.inChannel
         engine.load(km.map)
     }
@@ -275,8 +275,8 @@ final class AppModel: ObservableObject {
 
     func load(_ new: Keymap) {
         km = new
-        Notes.middleC3 = (new.noteConvention != "C4=60")
-        middleC3 = Notes.middleC3
+        naming = NoteNaming(rawValue: new.noteConvention) ?? .c5
+        Notes.naming = naming
         engine.inChannel = new.inChannel
         engine.load(new.map)
         sel = nil; rangeA = nil; rangeB = nil
@@ -284,7 +284,7 @@ final class AppModel: ObservableObject {
 
     func encoded() throws -> Data {
         var out = km
-        out.noteConvention = middleC3 ? "C3=60" : "C4=60"
+        out.noteConvention = naming.rawValue
         out.inChannel = engine.inChannel
         let enc = JSONEncoder()
         enc.outputFormatting = [.prettyPrinted, .sortedKeys]

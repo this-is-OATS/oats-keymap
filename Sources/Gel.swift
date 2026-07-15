@@ -1,6 +1,6 @@
 import SwiftUI
 
-let APP_VERSION = "0.6.1"
+let APP_VERSION = "0.7.0"
 
 // MARK: - Gels
 // Sixteen MIDI channels, sixteen colours. Colour is the only thing in this app
@@ -78,12 +78,22 @@ extension NSColor {
 
 // MARK: - Notes
 
+enum NoteNaming: String, CaseIterable, Codable {
+    case c3 = "C3=60"      // Keystation silkscreen
+    case c4 = "C4=60"      // most DAWs
+    case c5 = "C5=60"      // Gene's console — spec sheet: C5 is Middle C
+
+    var octaveOffset: Int {           // subtracted from n/12 to get the printed octave
+        switch self { case .c3: return 2; case .c4: return 1; case .c5: return 0 }
+    }
+}
+
 enum Notes {
     static let pc = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"]
-    static var middleC3 = true          // C3=60 matches the Keystation silkscreen
+    static var naming: NoteNaming = .c5
 
     static func name(_ n: Int) -> String {
-        pc[((n % 12) + 12) % 12] + String(n / 12 - (middleC3 ? 2 : 1))
+        pc[((n % 12) + 12) % 12] + String(n / 12 - naming.octaveOffset)
     }
     static func isBlack(_ n: Int) -> Bool { [1,3,6,8,10].contains(((n % 12) + 12) % 12) }
 }

@@ -111,7 +111,7 @@ enum Gene {
                      low: 28, high: 91, pinOffset: 27, confirmed: true,
                      caveat: "64 pipes, pins 1–64. Verified across the whole column."),
 
-                Rank(name: "Pan Flutes / Counter Melody", board: "331", channel: 2,
+                Rank(name: "Brass Pan Pipe / Counter Mel", board: "331", channel: 2,
                      low: 48, high: 69, pinOffset: 47, confirmed: false,
                      caveat: "22 pipes is certain — the range is not. My read (48–69) overlaps Bd 332 at 67–69, which is either a coupled register or a misread. Do not wire from this. Pins 23–32 on this board are spare."),
 
@@ -119,7 +119,7 @@ enum Gene {
                      low: 67, high: 91, pinOffset: 59, confirmed: true,
                      caveat: "Pins 8–32. Pins 1–7 (notes 60–66) are the unwired ADDT'L PERCUSSION (FUTURE) block."),
 
-                Rank(name: "Trumpets", board: "329", channel: 3,
+                Rank(name: "Trumpets (Fagotto)", board: "329", channel: 3,
                      low: 55, high: 86, pinOffset: 54, confirmed: true,
                      caveat: "32 pipes, pins 1–32. Verified across the whole column."),
 
@@ -130,7 +130,7 @@ enum Gene {
             registers: seatOnPads([
                 // Names read clean off the chart. Trigger notes default to the lowest
                 // octave (36-47) in this order — a starting map to verify against the console.
-                Register(number: 1,  name: "Pan Flutes"),
+                Register(number: 1,  name: "Brass Pan Pipe"),
                 Register(number: 2,  name: "Countermelody Bourdons"),
                 Register(number: 3,  name: "Glock / Xylophone"),
                 Register(number: 4,  name: "Double Bourdon Celeste"),
@@ -147,13 +147,13 @@ enum Gene {
                 PercussionHit(pin: 1,  name: "Bass Drum",    note: 36),
                 PercussionHit(pin: 2,  name: "Snare 1",      note: 38),
                 PercussionHit(pin: 3,  name: "Snare 2",      note: 40),
-                PercussionHit(pin: 4,  name: "Sleigh Bells?", note: nil),   // handwritten on the chart
-                PercussionHit(pin: 5,  name: "(blank)",      note: nil),
+                PercussionHit(pin: 4,  name: "Jingle Bells", note: 41),
+                PercussionHit(pin: 5,  name: "Hi & Lo Blocks", note: 43),
                 PercussionHit(pin: 6,  name: "Ride Cymbal",  note: nil),
                 PercussionHit(pin: 7,  name: "Crash Cymbal", note: nil),
-                PercussionHit(pin: 8,  name: "Block 1 High", note: nil),
-                PercussionHit(pin: 9,  name: "Block 2 Low",  note: nil),
-                PercussionHit(pin: 10, name: "Ship's Bell",  note: nil),
+                PercussionHit(pin: 8,  name: "Oogah Horn",   note: nil),
+                PercussionHit(pin: 9,  name: "Ship's Bell",  note: nil),
+                PercussionHit(pin: 10, name: "Siren",        note: nil),
                 PercussionHit(pin: 11, name: "Tambourine",   note: nil),
                 PercussionHit(pin: 12, name: "Castanets",    note: nil)
             ]

@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import CoreMIDI
 #if os(macOS)
 import AppKit
 #else
@@ -309,7 +310,7 @@ struct ToolRail: View {
             .labelsHidden().frame(width: 92)
 
             Lbl("Names")
-            Seg(value: $m.middleC3, options: [(true, "C3=60"), (false, "C4=60")])
+            Seg(value: $m.naming, options: NoteNaming.allCases.map { ($0, $0.rawValue) })
 
             Spacer()
             TBtn(t: "Identity") { m.identity() }.frame(width: 96)

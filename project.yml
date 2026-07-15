@@ -16,7 +16,7 @@ targets:
       base:
         PRODUCT_NAME: OATS KEYMAP
         PRODUCT_BUNDLE_IDENTIFIER: enterprises.fooknoats.oatskeymap
-        MARKETING_VERSION: "0.6.1"
+        MARKETING_VERSION: "0.7.0"
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: YES
         ENABLE_HARDENED_RUNTIME: NO
