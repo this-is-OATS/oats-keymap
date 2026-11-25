@@ -1,4 +1,4 @@
-# OATS MIDI KEYMAP v0.9.0
+# OATS MIDI KEYMAP v0.10.0
 
 Native macOS + iPadOS. One SwiftUI codebase, CoreMIDI engine.
 
@@ -107,3 +107,27 @@ controller is re-grabbed by name when it's plugged back in.
 Paint is still there for bulk work: arm a channel, drag across a run of keys.
 
 **Icon** — `Sources/Assets.xcassets/AppIcon.appiconset` (macOS sizes + iPad 1024).
+
+---
+
+## v0.9 / v0.10 — PLAY screen, presets, DAW in
+
+**PLAY** is the default screen. Bass & Melody is always on. Voice buttons (Glockenspiel,
+Xylophone, Brass Pan Pipe, Trumpets, Piccolos) layer their rank onto the keys you play
+and mix freely. Glockenspiel fires Glock On (reg 7, note 29) / Glock Off (reg 8, note 31).
+Mapping tools live behind **SETUP**.
+
+**Presets** — a preset = which voices are layered + which registers are in. Light what you
+want, **Save new**. Recall by tapping it, from the controller (LEARN it, or send a program
+change), or from the DAW. Registers fire as a diff against what's in, so a toggling relay is
+never double-flipped.
+
+**DAW is the default rig.** The app is both a MIDI input *and* a MIDI output named
+`OATS MIDI KEYMAP` in Logic / Ableton / Pro Tools:
+- Send a track **to** `OATS MIDI KEYMAP` (on In ch, default ch 1): notes get the live layers,
+  **program change N recalls preset N** (Ableton/Pro Tools "Program 1" = Preset 1; Logic
+  shows it as 0).
+- Record **from** `OATS MIDI KEYMAP` to capture exactly what hit the organ.
+- Don't monitor a track whose input and output are both OATS MIDI KEYMAP — that's a loop.
+
+iPad runs standalone: same PLAY screen, Keystation + controller, no DAW.

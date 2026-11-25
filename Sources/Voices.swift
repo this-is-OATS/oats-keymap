@@ -92,6 +92,8 @@ struct PlayView: View {
         VStack(spacing: 0) {
             PlayBar(m: m, e: e)
             ScrollView {
+                PresetBar(m: m)
+                Divider().background(Deck.rule)
                 VStack(alignment: .leading, spacing: 14) {
                     Lbl("Voices — tap to layer onto every key you play")
                     LazyVGrid(columns: cols, spacing: 12) {
@@ -206,6 +208,175 @@ struct VoiceButton: View {
             .frame(maxWidth: .infinity, minHeight: 160, alignment: .topLeading)
             .background(on ? tint : Deck.deck)
             .overlay(RoundedRectangle(cornerRadius: 6).stroke(on ? tint : Deck.rule, lineWidth: on ? 3 : 1))
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+
+// MARK: - Presets
+//
+// One button = the organ set up for a section: which voices are layered and which
+// register stops are in. Recall from the PLAY screen, the controller, or a DAW program
+// change (PC value 0 → Preset 1, i.e. "Program 1" in Ableton / Pro Tools, "0" in Logic).
+// Registers are fired as a DIFF against what the app believes is in, so a toggling
+// relay is never double-flipped.
+
+struct Preset: Identifiable, Codable, Hashable {
+    var id = UUID()
+    var number: Int
+    var name: String
+    var voices: [String]       // voice ids layered on top of Bass
+    var registers: [Int]       // register numbers that should be IN
+}
+
+enum PresetStore {
+    static let key = "oats.keymap.presets"
+    static func load() -> [Preset] {
+        if let d = UserDefaults.standard.data(forKey: key),
+           let p = try? JSONDecoder().decode([Preset].self, from: d) { return p }
+        return [
+            Preset(number: 1, name: "Bass",          voices: [],                        registers: []),
+            Preset(number: 2, name: "Glockenspiel",  voices: ["glock"],                 registers: []),
+            Preset(number: 3, name: "Xylophone",     voices: ["xylo"],                  registers: []),
+            Preset(number: 4, name: "Glock + Xylo",  voices: ["glock", "xylo"],         registers: []),
+            Preset(number: 5, name: "Trumpets",      voices: ["trumpets"],              registers: []),
+            Preset(number: 6, name: "Full",          voices: ["glock", "xylo", "trumpets", "piccolos"], registers: []),
+        ]
+    }
+    static func save(_ p: [Preset]) {
+        if let d = try? JSONEncoder().encode(p) { UserDefaults.standard.set(d, forKey: key) }
+    }
+}
+
+extension AppModel {
+    func recallPreset(number: Int) {
+        guard let p = presets.first(where: { $0.number == number }) else {
+            lastAction = "No preset \(number)"
+            return
+        }
+        recall(p)
+    }
+
+    func recall(_ p: Preset) {
+        let target = Set(p.voices.filter { id in voices.contains { $0.id == id && !$0.locked } })
+        for v in voices where !v.locked {
+            let was = activeVoices.contains(v.id), now = target.contains(v.id)
+            if was && !now { fireRegisters(v.offFire) }
+            if !was && now { fireRegisters(v.onFire) }
+        }
+        activeVoices = target
+
+        let want = Set(p.registers)
+        for i in km.organ.registers.indices {
+            let reg = km.organ.registers[i]
+            let shouldBeIn = want.contains(reg.number)
+            if reg.latched != shouldBeIn && reg.known {
+                fireRegister(reg)
+                km.organ.registers[i].latched = shouldBeIn
+            }
+        }
+        syncVoiceLayers()
+        currentPreset = p.id
+        lastAction = "Preset \(p.number) · \(p.name)"
+    }
+
+    /// Capture what's lit right now.
+    private func snapshot(number: Int, name: String?) -> Preset {
+        let vs = voices.filter { !$0.locked && activeVoices.contains($0.id) }
+        let regs = km.organ.registers.filter(\.latched).map(\.number)
+        let auto = vs.isEmpty ? "Bass" : vs.map(\.name).joined(separator: " + ")
+        return Preset(number: number, name: name ?? auto, voices: vs.map(\.id), registers: regs)
+    }
+
+    func savePreset() {
+        let n = (presets.map(\.number).max() ?? 0) + 1
+        let p = snapshot(number: n, name: nil)
+        presets.append(p)
+        currentPreset = p.id
+        lastAction = "Saved preset \(n) · \(p.name)"
+    }
+
+    func updateCurrentPreset() {
+        guard let id = currentPreset, let i = presets.firstIndex(where: { $0.id == id }) else { return }
+        var p = snapshot(number: presets[i].number, name: presets[i].name)
+        p.id = id
+        presets[i] = p
+        lastAction = "Updated preset \(p.number) · \(p.name)"
+    }
+
+    func deleteCurrentPreset() {
+        guard let id = currentPreset else { return }
+        presets.removeAll { $0.id == id }
+        currentPreset = nil
+    }
+
+    func renameCurrentPreset(_ name: String) {
+        guard let id = currentPreset, let i = presets.firstIndex(where: { $0.id == id }) else { return }
+        presets[i].name = name
+    }
+}
+
+struct PresetBar: View {
+    @ObservedObject var m: AppModel
+
+    private var currentName: Binding<String> {
+        Binding(get: { m.presets.first { $0.id == m.currentPreset }?.name ?? "" },
+                set: { m.renameCurrentPreset($0) })
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 10) {
+                Lbl("Presets — tap, hit on the controller, or send program change")
+                Spacer()
+                if m.currentPreset != nil {
+                    TextField("name", text: currentName)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: UI.floor, design: .monospaced))
+                        .padding(8)
+                        .frame(width: 220)
+                        .background(Deck.deck)
+                        .overlay(RoundedRectangle(cornerRadius: 3).stroke(Deck.rule, lineWidth: 1))
+                    TBtn(t: "Update") { m.updateCurrentPreset() }.frame(width: 110)
+                    TBtn(t: "Delete", danger: true) { m.deleteCurrentPreset() }.frame(width: 110)
+                }
+                TBtn(t: "Save new") { m.savePreset() }.frame(width: 130)
+            }
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(m.presets) { p in
+                        PresetChip(m: m, p: p).learnable(m, .preset(p.number))
+                    }
+                }
+            }
+        }
+        .padding(16)
+    }
+}
+
+struct PresetChip: View {
+    @ObservedObject var m: AppModel
+    let p: Preset
+
+    var body: some View {
+        let on = m.currentPreset == p.id
+        Button { m.recall(p) } label: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("PRESET \(p.number) · PC \(p.number)")
+                    .font(.system(size: UI.floor, weight: .bold, design: .monospaced))
+                    .opacity(0.7)
+                Text(p.name)
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .lineLimit(1)
+            }
+            .foregroundColor(on ? .black : Deck.ink)
+            .padding(.horizontal, 16).padding(.vertical, 10)
+            .frame(minWidth: 190, minHeight: 72, alignment: .leading)
+            .background(on ? Deck.armed : Deck.deck)
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(on ? Deck.armed : Deck.rule, lineWidth: on ? 3 : 1))
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .contentShape(Rectangle())
         }

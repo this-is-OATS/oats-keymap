@@ -32,6 +32,7 @@ enum CtlTarget: Codable, Hashable {
     case arm
     case clearLatches
     case voice(String)       // PLAY screen voice button
+    case preset(Int)         // preset number
 
     func title(_ m: AppModel) -> String {
         switch self {
@@ -46,6 +47,7 @@ enum CtlTarget: Codable, Hashable {
         case .arm:            return "Arm / disarm remap"
         case .clearLatches:   return "Clear pad lights"
         case .voice(let id):  return "Voice · " + (Voice.gene.first { $0.id == id }?.name ?? id)
+        case .preset(let n):  return "Preset \(n)" + (m.presets.first { $0.number == n }.map { " · \($0.name)" } ?? "")
         }
     }
 }

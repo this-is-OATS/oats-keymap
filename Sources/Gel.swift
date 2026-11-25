@@ -1,6 +1,6 @@
 import SwiftUI
 
-let APP_VERSION = "0.9.0"
+let APP_VERSION = "0.10.0"
 
 // MARK: - UI scale
 // One knob for every font in the chrome. 1.0 was the v0.7 look (too small at FOH).

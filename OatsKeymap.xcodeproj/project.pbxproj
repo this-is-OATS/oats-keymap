@@ -182,7 +182,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS MIDI KEYMAP";
 				SDKROOT = auto;
@@ -334,7 +334,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.10.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS MIDI KEYMAP";
 				SDKROOT = auto;

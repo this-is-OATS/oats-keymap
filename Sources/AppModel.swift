@@ -23,6 +23,8 @@ final class AppModel: ObservableObject {
     @Published var learnMode = false
     @Published var screen: Screen = .play
     @Published var activeVoices: Set<String> = []
+    @Published var presets: [Preset] = PresetStore.load() { didSet { PresetStore.save(presets) } }
+    @Published var currentPreset: UUID? = nil
     @Published var learning: CtlTarget? = nil
     @Published var ctlBindings: [CtlBinding] = ControlStore.load() { didSet { ControlStore.save(ctlBindings) } }
 
@@ -36,6 +38,7 @@ final class AppModel: ObservableObject {
         engine.load(km.map)
 
         engine.onControl = { [weak self] t in self?.handleControl(t) }
+        engine.onProgram = { [weak self] prog in self?.recallPreset(number: prog + 1) }
 
         // Bass is always under the hands.
         syncVoiceLayers()
@@ -64,7 +67,10 @@ final class AppModel: ObservableObject {
             learning = nil
             return
         }
-        for b in ctlBindings where b.trigger == t { perform(b.target) }
+        var hit = false
+        for b in ctlBindings where b.trigger == t { perform(b.target); hit = true }
+        // An unmapped program change from the controller recalls that preset.
+        if !hit, t.kind == .pc { recallPreset(number: t.num + 1) }
     }
 
     func perform(_ t: CtlTarget) {
@@ -83,6 +89,8 @@ final class AppModel: ObservableObject {
             clearPadLatches()
         case .voice(let id):
             if let v = voices.first(where: { $0.id == id }) { toggleVoice(v) }
+        case .preset(let n):
+            recallPreset(number: n)
         }
     }
 

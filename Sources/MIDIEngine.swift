@@ -59,6 +59,10 @@ final class MIDIEngine: ObservableObject {
     private var inPort    = MIDIPortRef()
     private var outPort   = MIDIPortRef()
     private var virtualSrc = MIDIEndpointRef()
+    private var virtualDst = MIDIEndpointRef()     // the DAW plays INTO the app here
+    private var dawRunning: UInt8 = 0               // DAW-input thread only
+    /// Program change from the DAW (0-based program number). Main thread.
+    var onProgram: ((Int) -> Void)?
     private var connected: MIDIEndpointRef = 0
     private var ctlPort   = MIDIPortRef()
     private var ctlConnected: MIDIEndpointRef = 0
@@ -99,12 +103,20 @@ final class MIDIEngine: ObservableObject {
         st = MIDISourceCreate(client, "OATS MIDI KEYMAP" as CFString, &virtualSrc)
         if st != noErr { status = "Virtual source failed (\(st))" }
 
+        // …and its twin, so Logic / Ableton / Pro Tools can send TO the app:
+        // notes get the live layers, program changes recall presets.
+        st = MIDIDestinationCreateWithBlock(client, "OATS MIDI KEYMAP" as CFString, &virtualDst) { [weak self] listPtr, _ in
+            self?.readDAW(listPtr)
+        }
+        if st != noErr { status = "Virtual input failed (\(st))" }
+
         refresh()
         status = "Idle"
     }
 
     deinit {
         if virtualSrc != 0 { MIDIEndpointDispose(virtualSrc) }
+        if virtualDst != 0 { MIDIEndpointDispose(virtualDst) }
         if client != 0 { MIDIClientDispose(client) }
     }
 
@@ -119,6 +131,7 @@ final class MIDIEngine: ObservableObject {
         }
         for i in 0..<MIDIGetNumberOfDestinations() {
             let ep = MIDIGetDestination(i)
+            if ep == virtualDst { continue }                 // never send to ourselves
             d.append(Port(id: ep, name: Self.displayName(ep)))
         }
         sources = s
@@ -148,6 +161,44 @@ final class MIDIEngine: ObservableObject {
         if ctlConnected != 0 { MIDIPortDisconnectSource(ctlPort, ctlConnected); ctlConnected = 0 }
         guard ep != 0, ctlPort != 0 else { return }
         if MIDIPortConnectSource(ctlPort, ep, nil) == noErr { ctlConnected = ep }
+    }
+
+    // MARK: DAW read — notes through the remap, program changes to presets
+
+    private func readDAW(_ listPtr: UnsafePointer<MIDIPacketList>) {
+        for packet in listPtr.unsafeSequence() {
+            let len = Int(packet.pointee.length)
+            guard len > 0 else { continue }
+            var bytes = [UInt8]()
+            withUnsafeBytes(of: packet.pointee.data) { raw in
+                for i in 0..<min(len, raw.count) { bytes.append(raw[i]) }
+            }
+            var i = 0
+            while i < bytes.count {
+                let status: UInt8
+                if bytes[i] & 0x80 != 0 {
+                    guard bytes[i] < 0xF0 else { dawRunning = 0; break }
+                    status = bytes[i]
+                    dawRunning = status
+                    i += 1
+                } else {
+                    guard dawRunning != 0 else { break }
+                    status = dawRunning
+                }
+                let kind = status & 0xF0
+                let need = (kind == 0xC0 || kind == 0xD0) ? 1 : 2
+                guard i + need <= bytes.count else { break }
+                let d1 = bytes[i]
+                let d2: UInt8 = need == 2 ? bytes[i + 1] : 0
+                i += need
+                if kind == 0xC0 {
+                    let prog = Int(d1)
+                    DispatchQueue.main.async { [weak self] in self?.onProgram?(prog) }
+                } else {
+                    handle(status, d1, d2)
+                }
+            }
+        }
     }
 
     // MARK: Controller read (MIDI Learn)
