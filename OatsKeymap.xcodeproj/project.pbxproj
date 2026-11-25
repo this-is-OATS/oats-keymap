@@ -31,7 +31,7 @@
 		846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEngine.swift; sourceTree = "<group>"; };
 		A17F593BB011E593FFB2B2EB /* Gel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gel.swift; sourceTree = "<group>"; };
 		C1707C2B883155CA080C4BF5 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
-		C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OATS KEYMAP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7DB05666A540CD22BB857B1 /* OATS MIDI KEYMAP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OATS MIDI KEYMAP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3C3A0188ABAD31FFF253ECB /* RegisterPads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPads.swift; sourceTree = "<group>"; };
 		0A7E5A11C0FFEE0000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A7E5A11C0FFEE0000000004 /* ControlMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMap.swift; sourceTree = "<group>"; };
@@ -41,7 +41,7 @@
 		0AF51358DD878285C779654D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */,
+				C7DB05666A540CD22BB857B1 /* OATS MIDI KEYMAP.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -91,7 +91,7 @@
 			packageProductDependencies = (
 			);
 			productName = OatsKeymap;
-			productReference = C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */;
+			productReference = C7DB05666A540CD22BB857B1 /* OATS MIDI KEYMAP.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -178,9 +178,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.1;
+				MARKETING_VERSION = 0.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
-				PRODUCT_NAME = "OATS KEYMAP";
+				PRODUCT_NAME = "OATS MIDI KEYMAP";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -330,9 +330,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.1;
+				MARKETING_VERSION = 0.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
-				PRODUCT_NAME = "OATS KEYMAP";
+				PRODUCT_NAME = "OATS MIDI KEYMAP";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;

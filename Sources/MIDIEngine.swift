@@ -4,11 +4,11 @@ import Combine
 
 // MARK: - MIDIEngine
 //
-// Keystation ──USB──▶ [input port] ──▶ remap (stacked) ──▶ [virtual source "OATS KEYMAP"]
+// Keystation ──USB──▶ [input port] ──▶ remap (stacked) ──▶ [virtual source "OATS MIDI KEYMAP"]
 //                                                       └──▶ [optional hardware destination]
 //
 // The virtual source means Logic / Ableton / MA3 / anything just sees a MIDI device
-// called OATS KEYMAP in its input list. No IAC bus, no loopback driver, no routing hacks.
+// called OATS MIDI KEYMAP in its input list. No IAC bus, no loopback driver, no routing hacks.
 //
 // Remapping happens on CoreMIDI's own high-priority thread. Everything that thread
 // touches lives behind `lock`; the @Published mirrors exist only for the UI.
@@ -79,7 +79,7 @@ final class MIDIEngine: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        var st = MIDIClientCreateWithBlock("OATS KEYMAP" as CFString, &client) { [weak self] _ in
+        var st = MIDIClientCreateWithBlock("OATS MIDI KEYMAP" as CFString, &client) { [weak self] _ in
             DispatchQueue.main.async { self?.refresh() }
         }
         guard st == noErr else { status = "MIDI client failed (\(st))"; return }
@@ -96,7 +96,7 @@ final class MIDIEngine: ObservableObject {
         }
 
         // The app's own published endpoint. This is the whole point.
-        st = MIDISourceCreate(client, "OATS KEYMAP" as CFString, &virtualSrc)
+        st = MIDISourceCreate(client, "OATS MIDI KEYMAP" as CFString, &virtualSrc)
         if st != noErr { status = "Virtual source failed (\(st))" }
 
         refresh()

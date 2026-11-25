@@ -1,12 +1,12 @@
-# OATS KEYMAP v0.8.1
+# OATS MIDI KEYMAP v0.8.2
 
 Native macOS + iPadOS. One SwiftUI codebase, CoreMIDI engine.
 
-Keystation 61es ──USB──▶ **OATS KEYMAP** ──▶ virtual MIDI source named `OATS KEYMAP`
+Keystation 61es ──USB──▶ **OATS MIDI KEYMAP** ──▶ virtual MIDI source named `OATS MIDI KEYMAP`
                                         └──▶ optional hardware destination (the organ)
 
 The virtual source means Logic / MainStage / anything just sees a MIDI device called
-**OATS KEYMAP** in its input list. No IAC bus. No loopback driver. No routing hacks.
+**OATS MIDI KEYMAP** in its input list. No IAC bus. No loopback driver. No routing hacks.
 
 ---
 

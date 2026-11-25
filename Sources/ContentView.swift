@@ -206,7 +206,7 @@ struct Header: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text("OATS KEYMAP")
+            Text("OATS MIDI KEYMAP")
                 .font(.system(size: UI.f(12), weight: .bold, design: .monospaced)).tracking(3)
                 .lineLimit(1).fixedSize()
             Text("v\(APP_VERSION)")
@@ -595,7 +595,7 @@ struct LiveCard: View {
                 BigPicker(value: $e.selectedDest,
                           options: [(MIDIEndpointRef(0), "— none —")] + e.destinations.map { ($0.id, $0.name) })
             }
-            Text("Output always appears as a MIDI device called OATS KEYMAP. Pick it as the input in Logic — no IAC bus needed.")
+            Text("Output always appears as a MIDI device called OATS MIDI KEYMAP. Pick it as the input in Logic — no IAC bus needed.")
                 .font(.system(size: UI.f(10), design: .monospaced)).foregroundColor(Deck.dim)
                 .fixedSize(horizontal: false, vertical: true)
 

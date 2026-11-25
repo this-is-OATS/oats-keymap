@@ -297,7 +297,7 @@ final class AppModel: ObservableObject {
     // MARK: Hookup sheet — the thing an organ tech reads
 
     func hookupSheet() -> String {
-        var out = ["OATS KEYMAP v\(APP_VERSION) — HOOKUP",
+        var out = ["OATS MIDI KEYMAP v\(APP_VERSION) — HOOKUP",
                    km.name,
                    km.organ.name + " · " + km.organ.revision,
                    "Keystation in on ch \(engine.inChannel), board at octave \(km.board.octaveShift)",

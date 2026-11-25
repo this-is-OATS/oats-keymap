@@ -14,11 +14,11 @@ targets:
       - Sources
     settings:
       base:
-        PRODUCT_NAME: OATS KEYMAP
+        PRODUCT_NAME: OATS MIDI KEYMAP
         PRODUCT_BUNDLE_IDENTIFIER: enterprises.fooknoats.oatskeymap
         DEVELOPMENT_TEAM: AC65824AY8
         CODE_SIGN_STYLE: Automatic
-        MARKETING_VERSION: "0.8.1"
+        MARKETING_VERSION: "0.8.2"
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: YES
         ENABLE_HARDENED_RUNTIME: NO
