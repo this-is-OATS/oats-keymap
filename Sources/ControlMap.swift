@@ -31,6 +31,7 @@ enum CtlTarget: Codable, Hashable {
     case panic
     case arm
     case clearLatches
+    case voice(String)       // PLAY screen voice button
 
     func title(_ m: AppModel) -> String {
         switch self {
@@ -44,6 +45,7 @@ enum CtlTarget: Codable, Hashable {
         case .panic:          return "Panic"
         case .arm:            return "Arm / disarm remap"
         case .clearLatches:   return "Clear pad lights"
+        case .voice(let id):  return "Voice · " + (Voice.gene.first { $0.id == id }?.name ?? id)
         }
     }
 }

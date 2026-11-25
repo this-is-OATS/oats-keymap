@@ -15,6 +15,10 @@ struct ContentView: View {
     @State private var exporting = false
 
     var body: some View {
+        Group {
+        if m.screen == .play {
+            PlayView(m: m, e: m.engine)
+        } else {
         HStack(spacing: 0) {
             VStack(spacing: 0) {
                 Header(m: m, importing: $importing, exporting: $exporting)
@@ -27,6 +31,8 @@ struct ContentView: View {
             Divider().background(Deck.rule)
             Side(m: m)
                 .frame(width: 440)
+        }
+        }
         }
         .background(Deck.deck)
         .foregroundColor(Deck.ink)
@@ -223,7 +229,7 @@ struct Header: View {
             TBtn(t: "Open")  { importing = true }.frame(width: 96)
             TBtn(t: "Save")  { exporting = true }.frame(width: 96)
             TBtn(t: "Hookup") { hookup = true }.frame(width: 96)
-            LearnButton(m: m).frame(width: 96)
+            TBtn(t: "◂ Play") { m.screen = .play }.frame(width: 96)
             TBtn(t: "Panic", danger: true) { m.engine.panic() }.frame(width: 96)
                 .learnable(m, .panic)
         }

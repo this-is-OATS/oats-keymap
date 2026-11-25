@@ -21,6 +21,8 @@ final class AppModel: ObservableObject {
 
     // Controller mapping
     @Published var learnMode = false
+    @Published var screen: Screen = .play
+    @Published var activeVoices: Set<String> = []
     @Published var learning: CtlTarget? = nil
     @Published var ctlBindings: [CtlBinding] = ControlStore.load() { didSet { ControlStore.save(ctlBindings) } }
 
@@ -34,6 +36,10 @@ final class AppModel: ObservableObject {
         engine.load(km.map)
 
         engine.onControl = { [weak self] t in self?.handleControl(t) }
+
+        // Bass is always under the hands.
+        syncVoiceLayers()
+        lastAction = ""
 
         // Edit follows the hands: press a key on the Keystation and the editor jumps to it.
         engine.$flash
@@ -75,6 +81,8 @@ final class AppModel: ObservableObject {
             engine.armed.toggle()
         case .clearLatches:
             clearPadLatches()
+        case .voice(let id):
+            if let v = voices.first(where: { $0.id == id }) { toggleVoice(v) }
         }
     }
 
@@ -334,6 +342,8 @@ final class AppModel: ObservableObject {
         engine.inChannel = new.inChannel
         engine.load(new.map)
         sel = nil; rangeA = nil; rangeB = nil
+        activeVoices = []
+        syncVoiceLayers()
     }
 
     func encoded() throws -> Data {
