@@ -10,7 +10,8 @@ import SwiftUI
 struct RegisterPads: View {
     @ObservedObject var m: AppModel
 
-    private let cols = [GridItem(.adaptive(minimum: 150), spacing: 8)]
+    // Two rows of six, always — twelve stops read as a console, not a wrapped list.
+    private let cols = Array(repeating: GridItem(.flexible(), spacing: 8), count: 6)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -19,11 +20,11 @@ struct RegisterPads: View {
                 Spacer()
                 if m.padAssignMode {
                     Text("ASSIGN MODE — set each pad's note & channel, then verify on the console")
-                        .font(.system(size: 9 * UI.s, design: .monospaced)).foregroundColor(Deck.bad)
+                        .font(.system(size: UI.f(9), design: .monospaced)).foregroundColor(Deck.bad)
                 }
                 Lbl("Clear")
                 Button { m.clearPadLatches() } label: {
-                    Text("○").font(.system(size: 13 * UI.s, design: .monospaced))
+                    Text("○").font(.system(size: UI.f(13), design: .monospaced))
                         .foregroundColor(Deck.ink).frame(width: 40, height: 32)
                         .background(Deck.panel2)
                         .overlay(RoundedRectangle(cornerRadius: 3).stroke(Deck.rule, lineWidth: 1))
@@ -62,20 +63,20 @@ struct Pad: View {
                         .overlay(Circle().stroke(reg.known ? tint : Deck.bad, lineWidth: 1.4))
                         .frame(width: 13, height: 13)
                     Text("\(reg.number)")
-                        .font(.system(size: 9 * UI.s, weight: .bold, design: .monospaced))
+                        .font(.system(size: UI.f(9), weight: .bold, design: .monospaced))
                         .foregroundColor(Deck.dim)
                     Spacer()
                     Text(reg.note.map { Notes.name($0) } ?? "—")
-                        .font(.system(size: 9 * UI.s, design: .monospaced))
+                        .font(.system(size: UI.f(9), design: .monospaced))
                         .foregroundColor(reg.known ? tint : Deck.bad)
                 }
                 if let slot = reg.padSlot {
                     Text("Bd 214 · pin \(RegisterBank.pin(slot))")
-                        .font(.system(size: 8 * UI.s, design: .monospaced))
+                        .font(.system(size: UI.f(8), design: .monospaced))
                         .foregroundColor(Deck.dim)
                 }
                 Text(reg.name)
-                    .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced))
+                    .font(.system(size: UI.f(10), weight: .bold, design: .monospaced))
                     .foregroundColor(reg.latched ? .black : (reg.known ? Deck.ink : Deck.dim2))
                     .lineLimit(2, reservesSpace: true)
                     .multilineTextAlignment(.leading)
@@ -105,7 +106,7 @@ struct PadAssign: View {
                 get: { reg.name },
                 set: { m.setPadName(reg, $0) }))
                 .textFieldStyle(.plain)
-                .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced))
+                .font(.system(size: UI.f(10), weight: .bold, design: .monospaced))
                 .foregroundColor(Deck.ink)
 
             HStack(spacing: 4) {
@@ -113,7 +114,7 @@ struct PadAssign: View {
                     Text("−").frame(width: 34, height: 34).background(Deck.panel2)
                 }.buttonStyle(.plain)
                 Text(reg.note.map { "\($0) \(Notes.name($0))" } ?? "—")
-                    .font(.system(size: 9 * UI.s, weight: .bold, design: .monospaced))
+                    .font(.system(size: UI.f(9), weight: .bold, design: .monospaced))
                     .foregroundColor(Deck.armed)
                     .frame(maxWidth: .infinity).frame(height: 34).background(Deck.deck)
                 Button { m.setPadNote(reg, min(127, (reg.note ?? 36) + 1)) } label: {
@@ -123,15 +124,10 @@ struct PadAssign: View {
             .overlay(RoundedRectangle(cornerRadius: 3).stroke(Deck.rule, lineWidth: 1))
             .clipShape(RoundedRectangle(cornerRadius: 3))
 
-            Picker("", selection: Binding(
-                get: { reg.channel },
-                set: { m.setPadChannel(reg, $0) })) {
-                ForEach(1...16, id: \.self) { Text("CH \($0)").tag($0) }
-            }
-            .labelsHidden()
-            .frame(maxWidth: .infinity)
-            .background(Gel.color(reg.channel).opacity(0.3))
-            .clipShape(RoundedRectangle(cornerRadius: 3))
+            BigPicker(value: Binding(get: { reg.channel },
+                                     set: { m.setPadChannel(reg, $0) }),
+                      options: (1...16).map { ($0, "CH \($0)") },
+                      tint: Gel.color(reg.channel))
         }
         .padding(12)
         .frame(maxWidth: .infinity, minHeight: 92, alignment: .topLeading)

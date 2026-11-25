@@ -83,7 +83,7 @@ struct Learnable: ViewModifier {
                     RoundedRectangle(cornerRadius: 4)
                         .stroke(Deck.armed, lineWidth: hot ? 3 : 1)
                     Text(hot ? "MOVE A CONTROL" : (bound?.trigger.text ?? "LEARN"))
-                        .font(.system(size: 8 * UI.s, weight: .bold, design: .monospaced))
+                        .font(.system(size: UI.f(8), weight: .bold, design: .monospaced))
                         .lineLimit(1)
                         .foregroundColor(.black)
                         .padding(.horizontal, 4).padding(.vertical, 2)
@@ -112,7 +112,7 @@ struct LearnButton: View {
             if !m.learnMode { m.learning = nil }
         } label: {
             Text(m.learnMode ? "DONE" : "LEARN")
-                .font(.system(size: 9 * UI.s, weight: .bold, design: .monospaced)).tracking(1.3)
+                .font(.system(size: UI.f(9), weight: .bold, design: .monospaced)).tracking(1.3)
                 .foregroundColor(m.learnMode ? .black : Deck.armed)
                 .padding(.horizontal, 14).padding(.vertical, 11)
                 .frame(maxWidth: .infinity)
@@ -134,12 +134,9 @@ struct ControllerCard: View {
         Card(title: "Controller", trailing: e.lastCtl) {
             HStack(spacing: 8) {
                 Lbl("Ctl in").frame(width: 100, alignment: .leading)
-                Picker("", selection: Binding(get: { e.selectedCtlSource },
-                                              set: { e.chooseController($0) })) {
-                    Text("— none —").tag(MIDIEndpointRef(0))
-                    ForEach(e.sources) { Text($0.name).tag($0.id) }
-                }
-                .labelsHidden()
+                BigPicker(value: Binding(get: { e.selectedCtlSource },
+                                         set: { e.chooseController($0) }),
+                          options: [(MIDIEndpointRef(0), "— none —")] + e.sources.map { ($0.id, $0.name) })
             }
 
             LearnButton(m: m)
@@ -147,7 +144,7 @@ struct ControllerCard: View {
             Text(m.learnMode
                  ? "Tap anything outlined in amber, then press, hit or move a control. Tap it again to cancel. Hit DONE when finished."
                  : "Pads, PULL buttons, channel gels, ARM, PANIC and pad-clear can all be fired from the controller. Buttons, pads, keys, program changes or any CC crossing half-way.")
-                .font(.system(size: 10 * UI.s, design: .monospaced))
+                .font(.system(size: UI.f(10), design: .monospaced))
                 .foregroundColor(m.learnMode ? Deck.armed : Deck.dim)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -156,15 +153,15 @@ struct ControllerCard: View {
                     ForEach(m.ctlBindings) { b in
                         HStack(spacing: 8) {
                             Text(b.trigger.text)
-                                .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced))
+                                .font(.system(size: UI.f(10), weight: .bold, design: .monospaced))
                                 .foregroundColor(Deck.armed)
                                 .frame(width: 150, alignment: .leading)
                             Text(b.target.title(m))
-                                .font(.system(size: 10 * UI.s, design: .monospaced))
+                                .font(.system(size: UI.f(10), design: .monospaced))
                                 .lineLimit(1)
                             Spacer()
                             Button { m.unbind(b) } label: {
-                                Text("×").font(.system(size: 13 * UI.s, design: .monospaced))
+                                Text("×").font(.system(size: UI.f(13), design: .monospaced))
                                     .foregroundColor(Deck.bad)
                                     .frame(width: 32, height: 32)
                                     .overlay(RoundedRectangle(cornerRadius: 2).stroke(Deck.rule, lineWidth: 1))

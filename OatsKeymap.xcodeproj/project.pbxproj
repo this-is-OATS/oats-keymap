@@ -178,7 +178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.0;
+				MARKETING_VERSION = 0.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;
@@ -330,7 +330,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.0;
+				MARKETING_VERSION = 0.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;

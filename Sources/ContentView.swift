@@ -30,7 +30,7 @@ struct ContentView: View {
         }
         .background(Deck.deck)
         .foregroundColor(Deck.ink)
-        .font(.system(size: 12 * UI.s, design: .monospaced))
+        .font(.system(size: UI.f(12), design: .monospaced))
         #if os(macOS)
         .frame(minWidth: 1280, minHeight: 760)
         #endif
@@ -66,7 +66,7 @@ struct Lbl: View {
     init(_ t: String) { self.t = t }
     var body: some View {
         Text(t.uppercased())
-            .font(.system(size: 9 * UI.s, weight: .regular, design: .monospaced))
+            .font(.system(size: UI.f(9), weight: .regular, design: .monospaced))
             .tracking(1.6)
             .foregroundColor(Deck.dim)
             .fixedSize()
@@ -96,7 +96,7 @@ struct Seg<T: Hashable>: View {
             ForEach(options, id: \.0) { opt in
                 Button { value = opt.0 } label: {
                     Text(opt.1.uppercased())
-                        .font(.system(size: 9 * UI.s, weight: value == opt.0 ? .bold : .regular, design: .monospaced))
+                        .font(.system(size: UI.f(9), weight: value == opt.0 ? .bold : .regular, design: .monospaced))
                         .tracking(1.3)
                         .foregroundColor(value == opt.0 ? .black : Deck.ink)
                         .padding(.horizontal, 14).padding(.vertical, 9)
@@ -117,7 +117,7 @@ struct TBtn: View {
     var body: some View {
         Button(action: action) {
             Text(t.uppercased())
-                .font(.system(size: 9 * UI.s, design: .monospaced)).tracking(1.3)
+                .font(.system(size: UI.f(9), design: .monospaced)).tracking(1.3)
                 .foregroundColor(danger ? Deck.bad : Deck.ink)
                 .padding(.horizontal, 14).padding(.vertical, 11)
                 .frame(maxWidth: .infinity)
@@ -127,6 +127,42 @@ struct TBtn: View {
         }
         .buttonStyle(.plain)
         .clipShape(RoundedRectangle(cornerRadius: 3))
+    }
+}
+
+// Dropdown that honours the 14pt floor. Stock Picker on macOS ignores .font().
+struct BigPicker<T: Hashable>: View {
+    @Binding var value: T
+    let options: [(T, String)]
+    var tint: Color? = nil
+
+    var body: some View {
+        Menu {
+            ForEach(options.indices, id: \.self) { i in
+                Button(options[i].1) { value = options[i].0 }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Text(options.first(where: { $0.0 == value })?.1 ?? "—")
+                    .font(.system(size: UI.floor, design: .monospaced))
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                Text("▾")
+                    .font(.system(size: UI.floor, design: .monospaced))
+                    .foregroundColor(Deck.dim)
+            }
+            .foregroundColor(Deck.ink)
+            .padding(.horizontal, 10)
+            .frame(height: 34)
+            .frame(maxWidth: .infinity)
+            .background(tint.map { $0.opacity(0.35) } ?? Deck.panel2)
+            .overlay(RoundedRectangle(cornerRadius: 3).stroke(Deck.rule, lineWidth: 1))
+            .clipShape(RoundedRectangle(cornerRadius: 3))
+            .contentShape(Rectangle())
+        }
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
     }
 }
 
@@ -143,11 +179,11 @@ struct Stepper2: View {
                     Text("−").frame(width: 42, height: 40).background(Deck.panel2)
                 }.buttonStyle(.plain)
                 Text("\(value)")
-                    .font(.system(size: 12 * UI.s, weight: .bold, design: .monospaced))
+                    .font(.system(size: UI.f(12), weight: .bold, design: .monospaced))
                     .frame(maxWidth: .infinity).frame(height: 40).background(Deck.deck)
                 if !suffix.isEmpty {
-                    Text(suffix).font(.system(size: 9 * UI.s, design: .monospaced))
-                        .foregroundColor(Deck.dim).padding(.trailing, 8)
+                    Text(suffix).font(.system(size: UI.f(9), design: .monospaced))
+                        .foregroundColor(Deck.dim).lineLimit(1).fixedSize().padding(.trailing, 8)
                         .frame(height: 40).background(Deck.deck)
                 }
                 Button { value = min(range.upperBound, value + 1) } label: {
@@ -171,10 +207,10 @@ struct Header: View {
     var body: some View {
         HStack(spacing: 12) {
             Text("OATS KEYMAP")
-                .font(.system(size: 12 * UI.s, weight: .bold, design: .monospaced)).tracking(3)
+                .font(.system(size: UI.f(12), weight: .bold, design: .monospaced)).tracking(3)
                 .lineLimit(1).fixedSize()
             Text("v\(APP_VERSION)")
-                .font(.system(size: 9 * UI.s, design: .monospaced)).foregroundColor(Deck.dim)
+                .font(.system(size: UI.f(9), design: .monospaced)).foregroundColor(Deck.dim)
 
             TextField("Instrument", text: $m.km.name)
                 .textFieldStyle(.plain)
@@ -221,7 +257,7 @@ struct HookupSheet: View {
 
             ScrollView([.horizontal, .vertical]) {
                 Text(m.hookupSheet())
-                    .font(.system(size: 11 * UI.s, design: .monospaced))
+                    .font(.system(size: UI.f(11), design: .monospaced))
                     .foregroundColor(Deck.ink)
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -251,7 +287,7 @@ struct GelRail: View {
                         ZStack(alignment: .bottom) {
                             Gel.color(c)
                             Text("\(c)")
-                                .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced))
+                                .font(.system(size: UI.f(10), weight: .bold, design: .monospaced))
                                 .foregroundColor(.black).padding(.bottom, 3)
                         }
                         .frame(height: 54)
@@ -279,10 +315,10 @@ struct PlotPanel: View {
             HStack(spacing: 14) {
                 Lbl("\(m.km.plot.keys)-key plot · notes \(m.km.plot.low)–\(m.km.high) · \(m.km.map.count) keys / \(m.km.assignmentCount) assignments")
                 Text("Board reaches \(m.km.boardLow)–\(m.km.boardHigh) (octave \(m.km.board.octaveShift > 0 ? "+" : "")\(m.km.board.octaveShift))")
-                    .font(.system(size: 9 * UI.s, design: .monospaced)).foregroundColor(Deck.armed)
+                    .font(.system(size: UI.f(9), design: .monospaced)).foregroundColor(Deck.armed)
                 if !m.collisions.isEmpty {
                     Text("⚠ \(m.collisions.count) collision\(m.collisions.count > 1 ? "s" : "")")
-                        .font(.system(size: 9 * UI.s, design: .monospaced)).foregroundColor(Deck.bad)
+                        .font(.system(size: UI.f(9), design: .monospaced)).foregroundColor(Deck.bad)
                 }
                 Spacer()
             }
@@ -344,10 +380,8 @@ struct ToolRail: View {
             Seg(value: $m.tool, options: Tool.allCases.map { ($0, $0.rawValue) })
 
             Lbl("In ch")
-            Picker("", selection: $e.inChannel) {
-                ForEach(1...16, id: \.self) { Text("CH \($0)").tag($0) }
-            }
-            .labelsHidden().frame(width: 120)
+            BigPicker(value: $e.inChannel, options: (1...16).map { ($0, "CH \($0)") })
+                .frame(width: 120)
 
             Lbl("Names")
             Seg(value: $m.naming, options: NoteNaming.allCases.map { ($0, $0.rawValue) })
@@ -392,7 +426,7 @@ struct KeyCard: View {
                     }
                     Button { m.addLayer(to: n) } label: {
                         Text("+ ADD ASSIGNMENT ON CH \(m.armedCh)")
-                            .font(.system(size: 9 * UI.s, design: .monospaced)).tracking(1.4)
+                            .font(.system(size: UI.f(9), design: .monospaced)).tracking(1.4)
                             .foregroundColor(Deck.dim)
                             .frame(maxWidth: .infinity).padding(.vertical, 10)
                             .overlay(RoundedRectangle(cornerRadius: 3)
@@ -402,7 +436,7 @@ struct KeyCard: View {
                 }
             } else {
                 Text("Press a key on the Keystation, or tap one on the plot.")
-                    .font(.system(size: 11 * UI.s, design: .monospaced)).foregroundColor(Deck.dim2)
+                    .font(.system(size: UI.f(11), design: .monospaced)).foregroundColor(Deck.dim2)
             }
         }
     }
@@ -421,7 +455,7 @@ struct LayerRow: View {
                 Lbl("Layer \(index + 1)")
                 Spacer()
                 Button { m.removeLayer(index, from: note) } label: {
-                    Text("×").font(.system(size: 13 * UI.s, design: .monospaced)).foregroundColor(Deck.bad)
+                    Text("×").font(.system(size: UI.f(13), design: .monospaced)).foregroundColor(Deck.bad)
                         .frame(width: 32, height: 32)
                         .overlay(RoundedRectangle(cornerRadius: 2).stroke(Deck.rule, lineWidth: 1))
                 }.buttonStyle(.plain)
@@ -434,13 +468,10 @@ struct LayerRow: View {
 
             HStack(spacing: 8) {
                 Lbl("Channel").frame(width: 100, alignment: .leading)
-                Picker("", selection: Binding(get: { a.ch },
-                                              set: { v in m.update(note, index) { $0.ch = v } })) {
-                    ForEach(1...16, id: \.self) { Text("CH \($0)").tag($0) }
-                }
-                .labelsHidden()
-                .background(Gel.color(a.ch).opacity(0.35))
-                .clipShape(RoundedRectangle(cornerRadius: 3))
+                BigPicker(value: Binding(get: { a.ch },
+                                         set: { v in m.update(note, index) { $0.ch = v } }),
+                          options: (1...16).map { ($0, "CH \($0)") },
+                          tint: Gel.color(a.ch))
             }
 
             Stepper2(label: "Velocity",
@@ -459,7 +490,7 @@ struct LayerRow: View {
 
             HStack(spacing: 6) {
                 Text(m.km.organ.hookup(note: a.note, channel: a.ch))
-                    .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced))
+                    .font(.system(size: UI.f(10), weight: .bold, design: .monospaced))
                     .foregroundColor(m.km.organ.hookup(note: a.note, channel: a.ch) == "no pipe"
                                      ? Deck.bad : Gel.color(a.ch))
                 Spacer()
@@ -516,14 +547,13 @@ struct PlotCard: View {
         Card(title: "Plot") {
             HStack(spacing: 8) {
                 Lbl("Keys").frame(width: 100, alignment: .leading)
-                Picker("", selection: $m.km.plot.keys) {
-                    ForEach([25, 37, 49, 61, 76, 81, 88, 128], id: \.self) { Text("\($0) keys").tag($0) }
-                }.labelsHidden()
+                BigPicker(value: $m.km.plot.keys,
+                          options: [25, 37, 49, 61, 76, 81, 88, 128].map { ($0, "\($0) keys") })
             }
             Stepper2(label: "Low note", value: $m.km.plot.low, range: 0...127, suffix: Notes.name(m.km.plot.low))
             Stepper2(label: "Board oct", value: $m.km.board.octaveShift, range: -3...3, suffix: "shift")
             Text("Dim keys sit outside the 61es keybed at this octave shift — the board can't reach them.")
-                .font(.system(size: 10 * UI.s, design: .monospaced)).foregroundColor(Deck.dim)
+                .font(.system(size: UI.f(10), design: .monospaced)).foregroundColor(Deck.dim)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -538,10 +568,10 @@ struct ClashCard: View {
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(m.collisions) { c in
                     Text(c.text)
-                        .font(.system(size: 10 * UI.s, design: .monospaced)).foregroundColor(Deck.bad)
+                        .font(.system(size: UI.f(10), design: .monospaced)).foregroundColor(Deck.bad)
                 }
                 Text("Same channel + note from two live sources. First note-off kills both.")
-                    .font(.system(size: 10 * UI.s, design: .monospaced)).foregroundColor(Deck.dim)
+                    .font(.system(size: UI.f(10), design: .monospaced)).foregroundColor(Deck.dim)
                     .fixedSize(horizontal: false, vertical: true).padding(.top, 4)
             }
         }
@@ -557,24 +587,21 @@ struct LiveCard: View {
         Card(title: "Live engine", trailing: e.status) {
             HStack(spacing: 8) {
                 Lbl("MIDI in").frame(width: 100, alignment: .leading)
-                Picker("", selection: $e.selectedSource) {
-                    ForEach(e.sources) { Text($0.name).tag($0.id) }
-                }.labelsHidden()
+                BigPicker(value: $e.selectedSource,
+                          options: e.sources.map { ($0.id, $0.name) })
             }
             HStack(spacing: 8) {
                 Lbl("Also to").frame(width: 100, alignment: .leading)
-                Picker("", selection: $e.selectedDest) {
-                    Text("— none —").tag(MIDIEndpointRef(0))
-                    ForEach(e.destinations) { Text($0.name).tag($0.id) }
-                }.labelsHidden()
+                BigPicker(value: $e.selectedDest,
+                          options: [(MIDIEndpointRef(0), "— none —")] + e.destinations.map { ($0.id, $0.name) })
             }
             Text("Output always appears as a MIDI device called OATS KEYMAP. Pick it as the input in Logic — no IAC bus needed.")
-                .font(.system(size: 10 * UI.s, design: .monospaced)).foregroundColor(Deck.dim)
+                .font(.system(size: UI.f(10), design: .monospaced)).foregroundColor(Deck.dim)
                 .fixedSize(horizontal: false, vertical: true)
 
             Button { e.armed.toggle() } label: {
                 Text(e.armed ? "DISARM" : "ARM REMAP")
-                    .font(.system(size: 10 * UI.s, weight: .bold, design: .monospaced)).tracking(1.6)
+                    .font(.system(size: UI.f(10), weight: .bold, design: .monospaced)).tracking(1.6)
                     .foregroundColor(e.armed ? .black : Deck.ink)
                     .frame(maxWidth: .infinity).padding(.vertical, 11)
                     .background(e.armed ? Deck.armed : Deck.panel2)
@@ -598,12 +625,12 @@ struct MonitorCard: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 2) {
                     if e.log.isEmpty {
-                        Text("No traffic.").font(.system(size: 10 * UI.s, design: .monospaced))
+                        Text("No traffic.").font(.system(size: UI.f(10), design: .monospaced))
                             .foregroundColor(Deck.dim2)
                     }
                     ForEach(e.log) { line in
                         Text(line.text)
-                            .font(.system(size: 10 * UI.s, design: .monospaced))
+                            .font(.system(size: UI.f(10), design: .monospaced))
                             .foregroundColor(Deck.dim)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }

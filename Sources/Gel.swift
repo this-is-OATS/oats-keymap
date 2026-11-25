@@ -1,11 +1,14 @@
 import SwiftUI
 
-let APP_VERSION = "0.8.0"
+let APP_VERSION = "0.8.1"
 
 // MARK: - UI scale
 // One knob for every font in the chrome. 1.0 was the v0.7 look (too small at FOH).
 enum UI {
     static let s: CGFloat = 1.4
+    /// No text in the app goes below 14pt. Headings scale past it.
+    static let floor: CGFloat = 14
+    static func f(_ base: CGFloat) -> CGFloat { max(floor, base * s) }
     /// Keybed height. The plot is a reference strip, not the main event.
     static let keybedHeight: CGFloat = 190
 }
