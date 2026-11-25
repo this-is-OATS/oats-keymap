@@ -46,6 +46,12 @@ final class MIDIEngine: ObservableObject {
     }
     @Published var inChannel = 1 { didSet { sync { rtInCh = UInt8(min(16, max(1, inChannel))) } } }
 
+    // Controller (MIDI Learn) input — a separate port; never remapped, never passed out.
+    @Published private(set) var selectedCtlSource: MIDIEndpointRef = 0 { didSet { connectCtl(selectedCtlSource) } }
+    @Published private(set) var lastCtl = "—"
+    var onControl: ((CtlTrigger) -> Void)?
+    static let ctlKey = "oats.keymap.ctlSourceName"
+
     struct LogLine: Identifiable { let id = UUID(); let text: String }
 
     // CoreMIDI
@@ -54,6 +60,10 @@ final class MIDIEngine: ObservableObject {
     private var outPort   = MIDIPortRef()
     private var virtualSrc = MIDIEndpointRef()
     private var connected: MIDIEndpointRef = 0
+    private var ctlPort   = MIDIPortRef()
+    private var ctlConnected: MIDIEndpointRef = 0
+    private var ctlRunning: UInt8 = 0                                       // ctl thread only
+    private var ctlLast = [UInt8](repeating: 0, count: 16 * 128)            // ctl thread only
 
     // engine-thread state
     private let lock = NSLock()
@@ -80,6 +90,10 @@ final class MIDIEngine: ObservableObject {
         guard st == noErr else { status = "Input port failed (\(st))"; return }
 
         MIDIOutputPortCreate(client, "OATS OUT" as CFString, &outPort)
+
+        MIDIInputPortCreateWithBlock(client, "OATS CTL" as CFString, &ctlPort) { [weak self] listPtr, _ in
+            self?.readCtl(listPtr)
+        }
 
         // The app's own published endpoint. This is the whole point.
         st = MIDISourceCreate(client, "OATS KEYMAP" as CFString, &virtualSrc)
@@ -111,12 +125,99 @@ final class MIDIEngine: ObservableObject {
         destinations = d
         if !s.contains(where: { $0.id == selectedSource }) { selectedSource = s.first?.id ?? 0 }
         if !d.contains(where: { $0.id == selectedDest })   { selectedDest = 0 }
+        if !s.contains(where: { $0.id == selectedCtlSource }) {
+            // Controller unplugged or app relaunched — re-grab it by name when it shows up.
+            let saved = UserDefaults.standard.string(forKey: Self.ctlKey)
+            let ep = s.first(where: { $0.name == saved })?.id ?? 0
+            if ep != selectedCtlSource { selectedCtlSource = ep }
+        }
     }
 
     private func connect(_ ep: MIDIEndpointRef) {
         if connected != 0 { MIDIPortDisconnectSource(inPort, connected); connected = 0 }
         guard ep != 0 else { return }
         if MIDIPortConnectSource(inPort, ep, nil) == noErr { connected = ep }
+    }
+
+    func chooseController(_ ep: MIDIEndpointRef) {
+        selectedCtlSource = ep
+        UserDefaults.standard.set(sources.first { $0.id == ep }?.name, forKey: Self.ctlKey)
+    }
+
+    private func connectCtl(_ ep: MIDIEndpointRef) {
+        if ctlConnected != 0 { MIDIPortDisconnectSource(ctlPort, ctlConnected); ctlConnected = 0 }
+        guard ep != 0, ctlPort != 0 else { return }
+        if MIDIPortConnectSource(ctlPort, ep, nil) == noErr { ctlConnected = ep }
+    }
+
+    // MARK: Controller read (MIDI Learn)
+
+    private func readCtl(_ listPtr: UnsafePointer<MIDIPacketList>) {
+        for packet in listPtr.unsafeSequence() {
+            let len = Int(packet.pointee.length)
+            guard len > 0 else { continue }
+            var bytes = [UInt8]()
+            withUnsafeBytes(of: packet.pointee.data) { raw in
+                for i in 0..<min(len, raw.count) { bytes.append(raw[i]) }
+            }
+            parseCtl(bytes)
+        }
+    }
+
+    /// Note-on, program change, or a CC crossing 64 upward = one trigger.
+    /// Buttons that send 127/0 fire once per press; knobs fire once per sweep past half.
+    private func parseCtl(_ b: [UInt8]) {
+        var i = 0
+        while i < b.count {
+            let status: UInt8
+            if b[i] & 0x80 != 0 {
+                guard b[i] < 0xF0 else { ctlRunning = 0; return }
+                status = b[i]
+                ctlRunning = status
+                i += 1
+            } else {
+                guard ctlRunning != 0 else { return }
+                status = ctlRunning
+            }
+            let kind = status & 0xF0
+            let need = (kind == 0xC0 || kind == 0xD0) ? 1 : 2
+            guard i + need <= b.count else { return }
+            let d1 = b[i]
+            let d2: UInt8 = need == 2 ? b[i + 1] : 0
+            i += need
+
+            let ch = Int(status & 0x0F) + 1
+            var trig: CtlTrigger? = nil
+            switch kind {
+            case 0x90 where d2 > 0:
+                trig = CtlTrigger(kind: .note, ch: ch, num: Int(d1))
+            case 0xB0:
+                let k = (ch - 1) * 128 + Int(d1 & 0x7F)
+                let was = ctlLast[k]
+                ctlLast[k] = d2
+                if d2 >= 64 && was < 64 { trig = CtlTrigger(kind: .cc, ch: ch, num: Int(d1)) }
+            case 0xC0:
+                trig = CtlTrigger(kind: .pc, ch: ch, num: Int(d1))
+            default:
+                break
+            }
+
+            let word: String
+            switch kind {
+            case 0x90: word = d2 > 0 ? "NOTE" : "OFF"
+            case 0x80: word = "OFF"
+            case 0xB0: word = "CC"
+            case 0xC0: word = "PC"
+            default:   word = "MSG"
+            }
+            let raw = "\(word) \(d1) ch\(ch)" + (need == 2 ? " = \(d2)" : "")
+            let fire = trig
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.lastCtl = raw
+                if let fire { self.onControl?(fire) }
+            }
+        }
     }
 
     static func displayName(_ ep: MIDIEndpointRef) -> String {

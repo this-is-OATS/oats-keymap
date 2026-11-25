@@ -1,4 +1,4 @@
-# OATS KEYMAP v0.3.0
+# OATS KEYMAP v0.8.0
 
 Native macOS + iPadOS. One SwiftUI codebase, CoreMIDI engine.
 
@@ -87,3 +87,23 @@ their note numbers. Type them into the Registers card and the FIRE buttons go li
 
 Everything above lives in `Organ.swift` as plain data. Nothing is hardcoded into the engine.
 A flat daylight scan of that chart and this becomes five minutes of typing.
+
+---
+
+## v0.8.0 — on-site controller mapping
+
+**Controller card (top of the sidebar)** — pick any MIDI device as *Ctl in*. It is a separate
+input: nothing it sends is remapped or passed to the organ.
+
+**LEARN** (header or Controller card) — everything mappable gets an amber outline. Tap a
+target, then press / hit / move a control. Done. Targets: the 12 register pads, every rank's
+PULL, the 16 out-channel gels, ARM, PANIC, pad-clear.
+
+Triggers: note-on, program change, or any CC crossing 64 upward. Bindings and the chosen
+controller are saved on this device (Mac or iPad), not in the instrument file, and the
+controller is re-grabbed by name when it's plugged back in.
+
+**Edit is the default tool** — press a key on the Keystation and the editor jumps to it.
+Paint is still there for bulk work: arm a channel, drag across a run of keys.
+
+**Icon** — `Sources/Assets.xcassets/AppIcon.appiconset` (macOS sizes + iPad 1024).

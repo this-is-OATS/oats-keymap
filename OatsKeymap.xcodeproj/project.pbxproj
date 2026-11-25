@@ -17,6 +17,8 @@
 		9C88D501A044D42C1D6B064B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D384F862FEEC368D23C5DF /* ContentView.swift */; };
 		AC48F341BDBC349BB65D4B24 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1707C2B883155CA080C4BF5 /* AppModel.swift */; };
 		C1980D5ABD9FB6305FE4F7B2 /* MIDIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */; };
+		0A7E5A11C0FFEE0000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A7E5A11C0FFEE0000000002 /* Assets.xcassets */; };
+		0A7E5A11C0FFEE0000000003 /* ControlMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7E5A11C0FFEE0000000004 /* ControlMap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,15 +31,17 @@
 		846CFC298A6861F8E609ACE8 /* MIDIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEngine.swift; sourceTree = "<group>"; };
 		A17F593BB011E593FFB2B2EB /* Gel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gel.swift; sourceTree = "<group>"; };
 		C1707C2B883155CA080C4BF5 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
-		C7DB05666A540CD22BB857B1 /* OatsKeymap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OatsKeymap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OATS KEYMAP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3C3A0188ABAD31FFF253ECB /* RegisterPads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPads.swift; sourceTree = "<group>"; };
+		0A7E5A11C0FFEE0000000002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0A7E5A11C0FFEE0000000004 /* ControlMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlMap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		0AF51358DD878285C779654D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C7DB05666A540CD22BB857B1 /* OatsKeymap.app */,
+				C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -46,6 +50,8 @@
 			isa = PBXGroup;
 			children = (
 				C1707C2B883155CA080C4BF5 /* AppModel.swift */,
+				0A7E5A11C0FFEE0000000002 /* Assets.xcassets */,
+				0A7E5A11C0FFEE0000000004 /* ControlMap.swift */,
 				79D384F862FEEC368D23C5DF /* ContentView.swift */,
 				A17F593BB011E593FFB2B2EB /* Gel.swift */,
 				0DEFF589FE35DD820D18CA3E /* Keymap.swift */,
@@ -75,6 +81,7 @@
 			buildConfigurationList = 7D852B68AC1CD4ECC84D0D10 /* Build configuration list for PBXNativeTarget "OatsKeymap" */;
 			buildPhases = (
 				5C839337F77AF4CCE65A8144 /* Sources */,
+				0A7E5A11C0FFEE0000000005 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -84,7 +91,7 @@
 			packageProductDependencies = (
 			);
 			productName = OatsKeymap;
-			productReference = C7DB05666A540CD22BB857B1 /* OatsKeymap.app */;
+			productReference = C7DB05666A540CD22BB857B1 /* OATS KEYMAP.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -96,6 +103,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					E69A3783390622F49BB2AAC8 = {
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 8B07C783A1B8257ED6EB94D8 /* Build configuration list for PBXProject "OatsKeymap" */;
@@ -117,6 +127,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		0A7E5A11C0FFEE0000000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A7E5A11C0FFEE0000000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5C839337F77AF4CCE65A8144 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -124,6 +145,7 @@
 			files = (
 				AC48F341BDBC349BB65D4B24 /* AppModel.swift in Sources */,
 				9C88D501A044D42C1D6B064B /* ContentView.swift in Sources */,
+				0A7E5A11C0FFEE0000000003 /* ControlMap.swift in Sources */,
 				4726F296046B9023177E1AB6 /* Gel.swift in Sources */,
 				506A18643D294809B12F6030 /* Keymap.swift in Sources */,
 				C1980D5ABD9FB6305FE4F7B2 /* MIDIEngine.swift in Sources */,
@@ -143,7 +165,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L3Y56C62B;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -154,7 +178,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.7.0;
+				MARKETING_VERSION = 0.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;
@@ -293,7 +317,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L3Y56C62B;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -304,7 +330,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.7.0;
+				MARKETING_VERSION = 0.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = enterprises.fooknoats.oatskeymap;
 				PRODUCT_NAME = "OATS KEYMAP";
 				SDKROOT = auto;

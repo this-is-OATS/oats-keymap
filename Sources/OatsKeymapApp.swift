@@ -9,7 +9,7 @@ struct OatsKeymapApp: App {
         }
         #if os(macOS)
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 1440, height: 860)
+        .defaultSize(width: 1760, height: 1100)
         #endif
     }
 }

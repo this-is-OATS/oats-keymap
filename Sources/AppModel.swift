@@ -1,14 +1,14 @@
 import SwiftUI
 import Combine
 
-enum Tool: String, CaseIterable { case paint = "Paint", edit = "Edit", range = "Range" }
+enum Tool: String, CaseIterable { case edit = "Edit", paint = "Paint", range = "Range" }
 enum Brush: String, CaseIterable { case set = "Set", stack = "Stack" }
 
 final class AppModel: ObservableObject {
 
     @Published var km = Keymap()          { didSet { engine.load(km.map) } }
     @Published var armedCh = 10
-    @Published var tool: Tool = .paint
+    @Published var tool: Tool = .edit
     @Published var brush: Brush = .set
     @Published var sel: Int? = nil
     @Published var rangeA: Int? = nil
@@ -19,13 +19,67 @@ final class AppModel: ObservableObject {
     @Published var lastAction = ""
     @Published var padAssignMode = false
 
+    // Controller mapping
+    @Published var learnMode = false
+    @Published var learning: CtlTarget? = nil
+    @Published var ctlBindings: [CtlBinding] = ControlStore.load() { didSet { ControlStore.save(ctlBindings) } }
+
+    private var bag = Set<AnyCancellable>()
+
     let engine = MIDIEngine()
 
     init() {
         Notes.naming = .c5
         engine.inChannel = km.inChannel
         engine.load(km.map)
+
+        engine.onControl = { [weak self] t in self?.handleControl(t) }
+
+        // Edit follows the hands: press a key on the Keystation and the editor jumps to it.
+        engine.$flash
+            .compactMap { $0 }
+            .sink { [weak self] n in
+                guard let self, self.tool == .edit else { return }
+                self.sel = n
+            }
+            .store(in: &bag)
     }
+
+    // MARK: Controller mapping
+
+    func binding(for t: CtlTarget) -> CtlBinding? { ctlBindings.first { $0.target == t } }
+
+    func handleControl(_ t: CtlTrigger) {
+        if learnMode {
+            guard let target = learning else { return }
+            ctlBindings.removeAll { $0.target == target || $0.trigger == t }
+            ctlBindings.append(CtlBinding(trigger: t, target: target))
+            lastAction = "Mapped \(t.text) → \(target.title(self))"
+            learning = nil
+            return
+        }
+        for b in ctlBindings where b.trigger == t { perform(b.target) }
+    }
+
+    func perform(_ t: CtlTarget) {
+        switch t {
+        case .pad(let slot):
+            if let r = pads.first(where: { $0.padSlot == slot }), r.known { tapPad(r) }
+        case .rank(let board):
+            if let r = km.organ.ranks.first(where: { $0.board == board }) { isPulled(r) ? drop(r) : pull(r) }
+        case .gel(let c):
+            armedCh = min(16, max(1, c))
+        case .panic:
+            engine.panic()
+        case .arm:
+            engine.armed.toggle()
+        case .clearLatches:
+            clearPadLatches()
+        }
+    }
+
+    func unbind(_ b: CtlBinding) { ctlBindings.removeAll { $0.id == b.id } }
+    func clearBindings() { ctlBindings.removeAll() }
 
     var bed: Keybed { Keybed(low: km.plot.low, high: km.high) }
     var collisions: [Collision] { km.collisions() }

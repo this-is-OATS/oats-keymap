@@ -86,24 +86,24 @@ struct PlotView: View {
 
         // text — dropped as soon as it won't fit
         let ink: Color = black ? Deck.ivory : Deck.ebony
-        if r.width >= 15 {
+        if r.width >= 18 {
             let top = stack.first
             let big = top.map { "\($0.note)" + (stack.count > 1 ? " ×\(stack.count)" : "") } ?? "\(n)"
             ctx.draw(Text(big)
-                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
                         .foregroundColor(ink.opacity(stack.isEmpty ? 0.28 : 1)),
-                     at: CGPoint(x: r.midX, y: r.maxY - 15), anchor: .center)
+                     at: CGPoint(x: r.midX, y: r.maxY - 21), anchor: .center)
         }
-        if r.width >= 24 {
+        if r.width >= 26 {
             let sub = stack.isEmpty
                 ? Notes.name(n)
                 : (stack.count == 1
                     ? "CH\(stack[0].ch)" + (stack[0].vel.map { " v\($0)" } ?? "")
                     : stack.map { "\($0.ch)" }.joined(separator: "·"))
             ctx.draw(Text(sub)
-                        .font(.system(size: 7, design: .monospaced))
+                        .font(.system(size: 10, design: .monospaced))
                         .foregroundColor(ink.opacity(0.66)),
-                     at: CGPoint(x: r.midX, y: r.maxY - 6), anchor: .center)
+                     at: CGPoint(x: r.midX, y: r.maxY - 8), anchor: .center)
         }
 
         // overlays
